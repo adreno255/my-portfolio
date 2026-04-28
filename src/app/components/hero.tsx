@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { DotGrid, TopoBackground } from './background';
 import { RaisedButton, SocialButton } from './buttons';
 import { GithubIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon } from './icons';
 
@@ -35,7 +34,7 @@ function CountUp({ target }: { target: string }) {
   return <>{display}</>;
 }
 
-// ─── Arc Glow — kept as a subtle directional vignette ──────────────────────
+// ─── Arc Glow ──────────────────────────────────────────────────────────────
 function ArcGlow() {
   return (
     <div
@@ -54,7 +53,6 @@ function ArcGlow() {
           filter: 'blur(28px)',
         }}
       />
-
       <svg
         className="absolute left-1/2 -translate-x-1/2"
         style={{ bottom: '-12px', width: 'min(980px, 140vw)', overflow: 'visible' }}
@@ -90,7 +88,6 @@ function ArcGlow() {
             <feGaussianBlur stdDeviation="2" />
           </filter>
         </defs>
-
         <path
           d="M 60,300 Q 480,-20 900,300"
           stroke="rgba(201,169,110,0.08)"
@@ -141,16 +138,10 @@ export default function Hero() {
     <>
       <section
         id="hero"
-        className="relative flex min-h-screen flex-col overflow-hidden bg-bg-base"
+        className="relative flex min-h-screen flex-col overflow-hidden bg-transparent"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
-        {/* Animated topographic background */}
-        <TopoBackground />
-
-        {/* Dot Grid background */}
-        <DotGrid />
-
-        {/* Subtle arc glow at bottom */}
+        {/* Arc glow at bottom */}
         <ArcGlow />
 
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 pt-28 md:pt-32">
@@ -166,9 +157,6 @@ export default function Hero() {
                     fill
                     sizes="(max-width: 640px) 144px, 176px"
                     className="rounded-full border border-border-default object-cover object-top"
-                    style={{
-                      boxShadow: '0 0 0 4px accent-subtle, 0 0 40px rgba(0,0,0,0.6)',
-                    }}
                     loading="eager"
                   />
                 </div>
@@ -209,7 +197,6 @@ export default function Hero() {
                 </p>
               </div>
 
-              {/* CTA Buttons */}
               <div className="mb-8 flex flex-wrap items-center gap-3" {...reveal(510)}>
                 <RaisedButton href="#projects" variant="primary">
                   <span>View projects</span>
@@ -225,7 +212,6 @@ export default function Hero() {
                 </RaisedButton>
               </div>
 
-              {/* Social icons */}
               <div className="flex items-center gap-2.5" {...reveal(580)}>
                 <SocialButton href="https://github.com/adreno255" label="GitHub">
                   <GithubIcon />
@@ -248,7 +234,7 @@ export default function Hero() {
                 className="animate-avatar-glow absolute rounded-full"
                 style={{
                   inset: '-32px',
-                  background: 'radial-gradient(circle, accent-glow) 0%, transparent 68%)',
+                  background: 'radial-gradient(circle, rgba(201,169,110,0.18) 0%, transparent 68%)',
                   filter: 'blur(20px)',
                 }}
               />
@@ -267,10 +253,6 @@ export default function Hero() {
                   fill
                   sizes="(max-width: 1024px) 256px, 320px"
                   className="rounded-full border border-border-default object-cover object-top"
-                  style={{
-                    boxShadow:
-                      '0 0 0 1px accent-glow, 0 0 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.3)',
-                  }}
                   loading="eager"
                 />
               </div>

@@ -4,10 +4,8 @@ import { useEffect, useRef } from 'react';
 
 /**
  * TopoBackground — animated topographic contour map.
- *
- * Uses a canvas-based Perlin-noise field to draw drifting contour lines,
- * mimicking the topographic map aesthetic in the reference image.
- * Colors are muted gray-green so it stays atmospheric and non-distracting.
+ * Uses `position: fixed` so it covers the full viewport regardless of scroll.
+ * z-index 0 keeps it behind all page content (which sits at z-10+).
  */
 export function TopoBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -18,16 +16,14 @@ export function TopoBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // ── Resize handler ─────────────────────────────────────────────
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
     resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
+    window.addEventListener('resize', resize);
 
-    // ── Minimal Perlin-noise (2D, single octave + 2 extra for detail) ──
+    // ── Perlin noise ───────────────────────────────────────────────
     const perm = new Uint8Array(512);
     const p = new Uint8Array(256);
     for (let i = 0; i < 256; i++) p[i] = i;
@@ -76,9 +72,7 @@ export function TopoBackground() {
       return v / max;
     }
 
-    // ── Marching squares edge table ─────────────────────────────────
-    // Simplified: for each cell we check if the corner values cross the
-    // iso-threshold and draw a line segment through the crossing edges.
+    // ── Marching squares ───────────────────────────────────────────
     function drawIsoLine(
       field: Float32Array,
       cols: number,
@@ -88,80 +82,71 @@ export function TopoBackground() {
       iso: number,
     ) {
       const edge = (a: number, b: number, t: number) => (t - a) / (b - a);
-
       for (let row = 0; row < rows - 1; row++) {
         for (let col = 0; col < cols - 1; col++) {
           const tl = field[row * cols + col];
           const tr = field[row * cols + col + 1];
           const bl = field[(row + 1) * cols + col];
           const br = field[(row + 1) * cols + col + 1];
-
           const x0 = col * cellW,
             x1 = (col + 1) * cellW;
           const y0 = row * cellH,
             y1 = (row + 1) * cellH;
-
-          // encode which corners are above iso
           const idx =
             (tl > iso ? 8 : 0) | (tr > iso ? 4 : 0) | (br > iso ? 2 : 0) | (bl > iso ? 1 : 0);
-
           if (idx === 0 || idx === 15) continue;
-
-          // interpolated crossing points on each edge
           const top = { x: x0 + edge(tl, tr, iso) * cellW, y: y0 };
           const right = { x: x1, y: y0 + edge(tr, br, iso) * cellH };
           const bottom = { x: x0 + edge(bl, br, iso) * cellW, y: y1 };
           const left = { x: x0, y: y0 + edge(tl, bl, iso) * cellH };
-
-          const segments: [typeof top, typeof top][] = [];
+          const segs: [typeof top, typeof top][] = [];
           switch (idx) {
             case 1:
-              segments.push([left, bottom]);
+              segs.push([left, bottom]);
               break;
             case 2:
-              segments.push([bottom, right]);
+              segs.push([bottom, right]);
               break;
             case 3:
-              segments.push([left, right]);
+              segs.push([left, right]);
               break;
             case 4:
-              segments.push([top, right]);
+              segs.push([top, right]);
               break;
             case 5:
-              segments.push([top, left]);
-              segments.push([bottom, right]);
+              segs.push([top, left]);
+              segs.push([bottom, right]);
               break;
             case 6:
-              segments.push([top, bottom]);
+              segs.push([top, bottom]);
               break;
             case 7:
-              segments.push([top, left]);
+              segs.push([top, left]);
               break;
             case 8:
-              segments.push([top, left]);
+              segs.push([top, left]);
               break;
             case 9:
-              segments.push([top, bottom]);
+              segs.push([top, bottom]);
               break;
             case 10:
-              segments.push([top, right]);
-              segments.push([left, bottom]);
+              segs.push([top, right]);
+              segs.push([left, bottom]);
               break;
             case 11:
-              segments.push([top, right]);
+              segs.push([top, right]);
               break;
             case 12:
-              segments.push([left, right]);
+              segs.push([left, right]);
               break;
             case 13:
-              segments.push([bottom, right]);
+              segs.push([bottom, right]);
               break;
             case 14:
-              segments.push([left, bottom]);
+              segs.push([left, bottom]);
               break;
           }
-
-          for (const [a, b] of segments) {
+          for (const [a, b] of segs) {
             ctx!.moveTo(a.x, a.y);
             ctx!.lineTo(b.x, b.y);
           }
@@ -169,55 +154,39 @@ export function TopoBackground() {
       }
     }
 
-    // ── Animation loop ──────────────────────────────────────────────
-    const CELL = 14; // marching-squares grid resolution
-    const LEVELS = 18; // number of iso contours
-    const SCALE = 0.0028; // noise spatial frequency
-    const SPEED = 0.00012; // drift speed
-    const GLOW_LEVELS = [0.0, 0.15, 0.82, 1.0]; // bright contours
-
-    let t = 0;
-    let raf: number;
+    const CELL = 14,
+      LEVELS = 18,
+      SCALE = 0.0028,
+      SPEED = 0.00012;
+    const GLOW_LEVELS = [0.0, 0.15, 0.82, 1.0];
+    let t = 0,
+      raf: number;
 
     const tick = () => {
       t += SPEED;
       const W = canvas.width,
         H = canvas.height;
       ctx.clearRect(0, 0, W, H);
-
       const cols = Math.ceil(W / CELL) + 2;
       const rows = Math.ceil(H / CELL) + 2;
       const field = new Float32Array(cols * rows);
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          field[r * cols + c] = fbm(c * SCALE, r * SCALE + t) * 0.5 + 0.5;
 
-      // Sample noise field
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const nx = c * SCALE;
-          const ny = r * SCALE + t;
-          // normalized 0→1
-          field[r * cols + c] = fbm(nx, ny) * 0.5 + 0.5;
-        }
-      }
-
-      // Draw each iso-contour level
       for (let lvl = 0; lvl < LEVELS; lvl++) {
         const iso = (lvl + 1) / (LEVELS + 1);
         const isGlow = GLOW_LEVELS.some((g) => Math.abs(iso - g) < 0.5 / LEVELS);
         const baseAlpha = 0.13 + (lvl % 3 === 0 ? 0.06 : 0);
-
         ctx.beginPath();
         drawIsoLine(field, cols, rows, CELL, CELL, iso);
-
         if (isGlow) {
-          // Subtle glow pass
           ctx.save();
           ctx.strokeStyle = `rgba(190, 200, 185, ${baseAlpha + 0.12})`;
           ctx.lineWidth = 2.5;
           ctx.filter = 'blur(3px)';
           ctx.stroke();
           ctx.restore();
-
-          // Crisp glow line on top
           ctx.beginPath();
           drawIsoLine(field, cols, rows, CELL, CELL, iso);
           ctx.strokeStyle = `rgba(210, 220, 205, ${baseAlpha + 0.18})`;
@@ -230,14 +199,13 @@ export function TopoBackground() {
           ctx.stroke();
         }
       }
-
       raf = requestAnimationFrame(tick);
     };
-
     raf = requestAnimationFrame(tick);
+
     return () => {
       cancelAnimationFrame(raf);
-      ro.disconnect();
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
@@ -245,15 +213,19 @@ export function TopoBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{ opacity: 0.65 }}
+      className="pointer-events-none fixed inset-0 h-full w-full"
+      style={{ opacity: 0.65, zIndex: 0 }}
     />
   );
 }
 
 export function DotGrid() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+    <div
+      className="pointer-events-none fixed inset-0 overflow-hidden"
+      style={{ zIndex: 0 }}
+      aria-hidden
+    >
       <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -268,9 +240,7 @@ export function DotGrid() {
             <rect width="100%" height="100%" fill="url(#vignette)" />
           </mask>
         </defs>
-        {/* Static base layer */}
         <rect width="100%" height="100%" fill="url(#dots)" mask="url(#dot-mask)" opacity="0.14" />
-        {/* Feedback #2: breathing overlay */}
         <rect
           width="100%"
           height="100%"
