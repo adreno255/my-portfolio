@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Angelo Mark Flores Jr. — Personal Portfolio
 
-## Getting Started
+Computer Science undergraduate at the University of Caloocan City, focused on back-end and full-stack web development.
 
-First, run the development server:
+## About
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+I'm a CS student seeking OJT placement in software or web development. I've built full-stack and back-end systems through academic projects, with a strong foundation in back-end development and a goal of becoming a well-rounded full-stack developer.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Category   | Technologies                                                            |
+| ---------- | ----------------------------------------------------------------------- |
+| Languages  | C#, Java, JavaScript, TypeScript, HTML, CSS                             |
+| Frameworks | NestJS, Express, React, React Native, Next.js, Laravel, .NET Framework  |
+| Databases  | PostgreSQL, MySQL, MSSQL, Firebase, Microsoft Access                    |
+| Tools      | Git, GitHub, Railway, Render, Vercel, HiveMQ, SendGrid, Docker, VS Code |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Projects
 
-## Learn More
+### Nurtura (2025 – 2026)
 
-To learn more about Next.js, take a look at the following resources:
+**Role:** Lead Back-End Developer  
+**Stack:** NestJS · Neon PostgreSQL · Firebase · HiveMQ (MQTT) · Expo Server (FCM) · SendGrid · Docker · Render
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Indoor urban farming Android app with IoT-driven automated plant care. Sole back-end developer — built the REST API, WebSocket server, and MQTT integration for real-time device communication, with push notifications, email, and Firebase authentication.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+### EyeSite (2025)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Role:** Full-Stack Developer  
+**Stack:** React · Laravel · MySQL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Appointment booking website for an optical clinic, built as part of a 2-person team. Developed the Laravel back-end API and integrated it with the React front-end end-to-end.
+
+---
+
+### AttendEase (2024 – 2025)
+
+**Role:** DBMS Administrator  
+**Stack:** C# · .NET Framework · MySQL · Railway
+
+Windows Forms Employee Management System for a university campus environment, featuring real-time class monitoring, dynamic payout calculations, and a remote MySQL database deployed on Railway.
+
+---
+
+### UCC North Food Tracker (2023 – 2024)
+
+**Role:** Back-End Developer  
+**Stack:** C# · .NET Framework · Microsoft Access
+
+Windows Forms app for browsing food store items and scheduling pick-ups, with a checkout and receipt generation system backed by Microsoft Access.
+
+## Contact
+
+- 📧 [flores.angelomarkjrbscs2023@gmail.com](mailto:flores.angelomarkjrbscs2023@gmail.com)
+- 💼 [linkedin.com/in/angelo-mark-flores-jr-85399a404](https://linkedin.com/in/angelo-mark-flores-jr-85399a404)
+- 🐙 [github.com/adreno255](https://github.com/adreno255)
+- 📱 (+63) 921 714 9312
