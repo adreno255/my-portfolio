@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { RaisedButton } from './buttons';
 import { DownloadIcon } from './icons';
 
-const NAV_LINKS = ['About', 'Skills', 'Projects', 'Certificates', 'Contact'];
+const NAV_LINKS = ['About', 'Skills', 'Projects', 'Contact'];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
