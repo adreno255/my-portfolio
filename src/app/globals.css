@@ -1,26 +1,159 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─── 1. Theme Configuration (Variables Only) ───────────────────────────── */
+@theme {
+  /* Surface & Background */
+  --color-bg-base: #0a0a0a;
+  --color-bg-raised: #111111;
+  --color-bg-elevated: #1a1a1a;
+  --color-bg-overlay: #222222;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Borders */
+  --color-border-subtle: #1a1a1a;
+  --color-border-default: #2e2e2e;
+  --color-border-strong: #3a3a3a;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Text */
+  --color-text-primary: #e8e6e1;
+  --color-text-secondary: #aaaaaa;
+  --color-text-muted: #666666;
+  --color-text-faint: #444444;
+
+  /* Accent (Warm Gold) */
+  --color-accent: #c9a96e;
+  --color-accent-light: #d4b880;
+  --color-accent-dark: #7a5e2a;
+  --color-accent-subtle: rgba(201, 169, 110, 0.08);
+  --color-accent-glow: rgba(201, 169, 110, 0.18);
+
+  /* Neutrals */
+  --color-neutral-100: #f2f0eb;
+  --color-neutral-200: #e8e6e1;
+  --color-neutral-300: #d4d2cc;
+  --color-neutral-shadow: #8a8880;
+
+  /* Topo Background */
+  --color-topo-stroke: rgba(180, 185, 175, 0.18);
+  --color-topo-glow: rgba(200, 210, 190, 0.28);
+
+  /* Shadow Utilities */
+  --shadow-button-primary: 0 3px 0 0 #8a8880, 0 4px 10px rgba(0, 0, 0, 0.45);
+  --shadow-button-secondary: 0 3px 0 0 #0d0d0d, 0 4px 10px rgba(0, 0, 0, 0.5);
+  --shadow-button-hover: 0 1px 0 0 #8a8880, 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  /* Core Mapping */
+  --color-background: var(--color-bg-base);
+  --color-foreground: var(--color-text-primary);
+
+  /* Font Mappings */
+  --font-playfair: var(--font-playfair);
+  --font-dm-sans: var(--font-dm-sans);
+  --font-dm-mono: var(--font-dm-mono);
+
+  /* ─── Keyframes ────────────────────────────────────────────────────────── */
+  @keyframes arcPulse {
+    0%,
+    100% {
+      opacity: 0.75;
+    }
+    50% {
+      opacity: 1;
+    }
   }
+  @keyframes arcGlowPulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes arcShimmer {
+    0% {
+      stroke-dashoffset: 1600;
+      opacity: 0;
+    }
+    6% {
+      opacity: 1;
+    }
+    94% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: -1600;
+      opacity: 0;
+    }
+  }
+  @keyframes dotBreathe {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.08;
+    }
+  }
+  @keyframes avatarFloat {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+  @keyframes avatarGlow {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.38;
+      transform: scale(1.07);
+    }
+  }
+  @keyframes ringRotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes ringFade {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  /* ─── Animation Utilities ──────────────────────────────────────────────── */
+  /* This generates classes like 'animate-arc-pulse' */
+  --animate-arc-pulse: arcPulse 4.5s ease-in-out infinite;
+  --animate-arc-glow-pulse: arcGlowPulse 4.5s ease-in-out infinite;
+  --animate-arc-shimmer: arcShimmer 4s ease-in-out infinite;
+  --animate-dot-breathe: dotBreathe 7s ease-in-out infinite;
+  --animate-avatar-float: avatarFloat 5s ease-in-out infinite;
+  --animate-avatar-glow: avatarGlow 5s ease-in-out infinite;
+  --animate-ring-rotate: ringRotate 14s linear infinite, ringFade 5s ease-in-out infinite;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── 2. Global Base Styles (Standard CSS Only) ─────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
