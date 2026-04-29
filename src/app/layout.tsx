@@ -22,9 +22,49 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Angelo Mark Flores Jr. | CS Student & Full-Stack Developer',
+  title: 'Angelo Mark Flores Jr. | Full-Stack Developer & CS Student',
   description:
-    'Personal Portfolio of Angelo Mark Flores Jr., a full-stack developer specializing in backend development.',
+    'Portfolio of Angelo Mark Flores Jr. — CS undergraduate at University of Caloocan City specializing in NestJS, React, Next.js, and PostgreSQL backend systems.',
+  keywords: [
+    'full-stack developer',
+    'NestJS',
+    'React',
+    'Next.js',
+    'Philippines developer',
+    'CS student',
+  ],
+  authors: [{ name: 'Angelo Mark Flores Jr.' }],
+  creator: 'Angelo Mark Flores Jr.',
+
+  // Open Graph — controls how your link looks on Facebook, LinkedIn, Discord, etc.
+  openGraph: {
+    type: 'website',
+    url: 'https://www.angelomarkfloresjr.tech',
+    title: 'Angelo Mark Flores Jr. | Full-Stack Developer',
+    description: 'CS undergraduate building scalable backend systems and full-stack apps.',
+    siteName: 'Angelo Flores Portfolio',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+
+  // Twitter/X card
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Angelo Mark Flores Jr. | Full-Stack Developer',
+    description: 'CS undergraduate building scalable backend systems.',
+    images: ['/og-image.png'],
+  },
+
+  // Tells crawlers not to block this site
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+
+  // Canonical URL — prevents duplicate content penalties
+  alternates: {
+    canonical: 'https://www.angelomarkfloresjr.tech',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -47,6 +87,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main className="flex-1">{children}</main>
         </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Angelo Mark Flores Jr.',
+              url: 'https://www.angelomarkfloresjr.tech',
+              jobTitle: 'Full-Stack Developer',
+              studentOf: 'University of Caloocan City',
+              sameAs: [
+                'https://github.com/adreno255',
+                'https://linkedin.com/in/angelo-mark-flores-jr-85399a404',
+              ],
+            }),
+          }}
+        />
       </body>
     </html>
   );

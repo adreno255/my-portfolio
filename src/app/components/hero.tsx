@@ -207,7 +207,7 @@ export default function Hero() {
                   <ArrowRightIcon />
                 </RaisedButton>
                 <RaisedButton
-                  href="/resume.pdf"
+                  href="/Angelo-Flores-Resume.pdf"
                   download="Angelo-Flores-Resume.pdf"
                   variant="secondary"
                 >

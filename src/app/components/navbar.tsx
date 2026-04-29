@@ -94,7 +94,11 @@ export default function Navbar() {
 
         {/* Desktop resume button */}
         <div className="hidden md:block">
-          <RaisedButton href="/resume.pdf" download="Angelo-Flores-Resume.pdf" variant="primary">
+          <RaisedButton
+            href="/Angelo-Flores-Resume.pdf"
+            download="Angelo-Flores-Resume.pdf"
+            variant="primary"
+          >
             <DownloadIcon />
             Resume
           </RaisedButton>
