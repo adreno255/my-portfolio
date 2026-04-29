@@ -65,6 +65,7 @@ export default function Navbar() {
           onClick={(e) => {
             e.preventDefault();
             document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', '/');
           }}
           className="font-playfair text-2xl font-bold tracking-tight text-text-primary transition-opacity hover:opacity-70"
         >

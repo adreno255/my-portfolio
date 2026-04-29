@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 import { RaisedButton, SocialButton } from './buttons';
 import { GithubIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon } from './icons';
+import ConstellationField from './constellation-field';
 
 // ─── Stats Bar ─────────────────────────────────────────────────────────────
 const STATS = [
@@ -120,6 +121,8 @@ function ArcGlow() {
 // ─── Hero ──────────────────────────────────────────────────────────────────
 export default function Hero() {
   const [visible, setVisible] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const avatarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 80);
@@ -137,6 +140,7 @@ export default function Hero() {
   return (
     <>
       <section
+        ref={heroRef}
         id="hero"
         className="relative flex min-h-screen flex-col overflow-hidden bg-transparent"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -230,6 +234,7 @@ export default function Hero() {
 
             {/* ── Right: desktop avatar ── */}
             <div className="relative hidden shrink-0 md:block" {...reveal(200)}>
+              <ConstellationField />
               <div
                 className="animate-avatar-glow absolute rounded-full"
                 style={{
@@ -246,7 +251,11 @@ export default function Hero() {
                     'conic-gradient(from 90deg, transparent 55%, rgba(201,169,110,0.35) 72%, rgba(232,230,225,0.65) 78%, rgba(201,169,110,0.35) 84%, transparent 100%)',
                 }}
               />
-              <div className="animate-avatar-float relative h-64 w-64 lg:h-80 lg:w-80">
+              <div
+                ref={avatarRef}
+                className="animate-avatar-float relative h-64 w-64 lg:h-80 lg:w-80"
+                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+              >
                 <Image
                   src="/profile-pic.JPG"
                   alt="Angelo Mark Flores Jr."
